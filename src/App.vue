@@ -1,10 +1,13 @@
 <template>
   <v-app>
-    <v-navigation-drawer app>
+    <v-navigation-drawer
+        app
+        v-model="drawer"
+    >
     </v-navigation-drawer>
 
     <v-app-bar app>
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-app-bar-title>
         <router-link to="/" class="mx-2">Simple App</router-link>
         <span v-if="user">{{ user.name }}</span>
@@ -41,7 +44,7 @@ import {mapState, mapMutations} from 'vuex'
 export default {
   name: 'App',
   data: () => ({
-    //
+    drawer: false
   }),
   computed: {
     ...mapState([
@@ -73,3 +76,8 @@ export default {
   }
 }
 </script>
+<style>
+a {
+  color: lightpink;
+}
+</style>

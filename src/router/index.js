@@ -1,9 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import UserLogin from "@/components/UserLogin";
-import UserRegister from "@/components/UserRegister";
-import UserDashboard from "@/components/UserDashboard";
-import AdminDashboard from "@/views/AdminDashboard";
+import UserLogin from "@/views/auth/UserLogin";
+import UserRegister from "@/views/auth/UserRegister";
+import UserDashboard from "@/views/user/UserDashboard";
+import AdminDashboard from "@/views/admin/AdminDashboard";
 
 const routes = [
   {

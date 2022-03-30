@@ -67,8 +67,8 @@ export default {
     ]),
     registerUser() {
       if(this.password === this.confirmPass && this.password.length > 0) {
-        let url = '//localhost:3000/register'
-        if(this.is_admin === true) url = '//localhost:3000/register-admin'
+        let url = '//localhost:3001/register'
+        if(this.is_admin === true) url = '//localhost:3001/register-admin'
         axios.post(url, {
           name: this.name,
           email: this.email,

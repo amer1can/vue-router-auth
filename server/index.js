@@ -102,8 +102,8 @@ router.get('/all', (req, res) => {
 
 app.use(router)
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3001
 
-const server = app.listen(port, ()=> {
+app.listen(port, ()=> {
     console.log('Express server listening on port ' + port)
 })
