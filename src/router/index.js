@@ -1,25 +1,93 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import UserLogin from "@/components/UserLogin";
+import UserRegister from "@/components/UserRegister";
+import UserDashboard from "@/components/UserDashboard";
+import AdminDashboard from "@/views/AdminDashboard";
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: UserLogin,
+    meta: {
+      guest: true
+    },
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: UserRegister,
+    meta: {
+      guest: true
+    }
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: UserDashboard,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: AdminDashboard,
+    meta: {
+      requiresAuth: true,
+      is_admin: true
+    }
   },
   {
     path: '/about',
     name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    component: () => import('../views/AboutView.vue'),
   }
 ]
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if(to.matched.some(record => record.meta.requiresAuth)) {
+    if(localStorage.getItem('jwt') == null) {
+      next({
+        path: '/login',
+        params: { nextUrl: to.fullPath }
+      })
+      // this.$store.commit('toggleLogin', false)
+    } else {
+      const user = JSON.parse(localStorage.getItem('user'))
+      // this.$store.commit('toggleLogin', true)
+      if(to.matched.some(record => record.meta.is_admin)) {
+        if(user.is_admin == 1) {
+          next()
+        } else {
+          next({ name: 'dashboard' })
+        }
+      } else {
+        next()
+      }
+    }
+  } else if (to.matched.some(record => record.meta.guest)) {
+    if(localStorage.getItem('jwt') == null) {
+      // this.$store.commit('toggleLogin', false)
+      next()
+    } else {
+      // this.$store.commit('toggleLogin', true)
+      next({ name: 'dashboard' })
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

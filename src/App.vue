@@ -1,30 +1,75 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <v-app>
+    <v-navigation-drawer app>
+    </v-navigation-drawer>
+
+    <v-app-bar app>
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-app-bar-title>
+        <router-link to="/" class="mx-2">Simple App</router-link>
+        <span v-if="user">{{ user.name }}</span>
+      </v-app-bar-title>
+
+      <router-link to="/dashboard" class="mx-2">Dashboard</router-link>
+      <router-link to="/register" class="mx-2">Register</router-link>
+      <router-link to="/login" class="mx-2">Login</router-link>
+      <router-link to="/admin" class="mx-2">Admin</router-link>
+      <router-link to="/about" class="mx-2">About</router-link>
+
+      <v-btn icon>
+        <v-icon>mdi-account</v-icon>
+      </v-btn>
+      <v-btn icon
+             @click="userLogout"
+             v-if="isLoggedIn"
+      >
+        <v-icon>mdi-exit-to-app</v-icon>
+      </v-btn>
+    </v-app-bar>
+
+    <v-main>
+      <v-container fluid>
+        <router-view/>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import {mapState, mapMutations} from 'vuex'
 
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+export default {
+  name: 'App',
+  data: () => ({
+    //
+  }),
+  computed: {
+    ...mapState([
+        'user',
+        'isLoggedIn'
+    ]),
+    // showUser() {
+    //   return JSON.parse(localStorage.getItem('user'))
+    // }
+  },
+  mounted() {
+    if(!localStorage.getItem('user')) {
+      this.$store.commit('toggleLogin',false)
+    } else {
+      this.$store.commit('getUserFromStorage')
+      this.$store.commit('toggleLogin',true)
+    }
+  },
+  methods: {
+    ...mapMutations([
+        'toggleLogin'
+    ]),
+    userLogout() {
+      localStorage.removeItem('jwt')
+      localStorage.removeItem('user')
+      this.toggleLogin(false)
+      this.$router.push('/')
     }
   }
 }
-</style>
+</script>
