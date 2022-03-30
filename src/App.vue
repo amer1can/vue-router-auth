@@ -27,7 +27,7 @@
       </v-btn>
     </v-app-bar>
 
-    <v-main>
+    <v-main style="height: 100vh">
       <v-container fluid>
         <router-view/>
       </v-container>

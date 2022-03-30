@@ -9,18 +9,17 @@
     </v-card-header>
 
     <v-card-text>
-      <input type="text"
+      <v-text-field type="text"
              name="email"
              v-model="email"
              placeholder="Email"
-             @click="error=null"
-             class="my-3 border border-l px-2 py-1">
-      <input name="password"
+             rules="emailRules"
+             @click="error=null" />
+      <v-text-field name="password"
              type="password"
              v-model="password"
              @click="error=null"
-             placeholder="Password"
-             class="my-3 border border-l px-2 pt-1">
+             placeholder="Password"/>
       <div class="err">
         <label v-if="error" class="err d-block text-red">{{ error }}</label>
       </div>
@@ -48,7 +47,11 @@ export default {
   data: () => ({
     email: '',
     password: '',
-    error: null
+    error: null,
+    emailRules: [
+        v => !!v || 'Email is required',
+        v => /.+@.+/.test(v) || 'Email must be a valid'
+    ]
   }),
   methods: {
     ...mapMutations([
